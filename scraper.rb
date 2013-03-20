@@ -30,19 +30,18 @@ def scrap
   page = agent.get(url)
   agent.print_cookies
   
-  p "first we are going to pass the captcha..."
+  p "first we need get the captcha..."
   captcha = agent.get(captcha_url)
-  agent.print_cookiese.to_s
-  end
-  agent.cookie_jar.save_as("cookies_mechanize.txt", :cookiestxt)
+  agent.print_cookies
+  
   captcha.save captcha_file_name
   spawn("open captcha.html")
-  puts "Type captcha. CTRL+D to continue"
-  captcha_txt = STDIN.read.split("\n").first.upcase
+  puts "Type captcha. <ENTER> to continue"
+  captcha_txt = gets.split("\n").first.upcase
   p captcha_txt
   
   p "now the serious business..."
-  # TODO fill form in page and post captcha!
+  # TODO fill form
 end
 
 def save_capcha
