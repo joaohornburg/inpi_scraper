@@ -2,10 +2,11 @@
 
 require 'mechanize'
 
-class Mechanizer
+class Mechanize
   def print_cookies
     self.cookie_jar.each do |cookie|
-    p cookie.to_s
+      p cookie.to_s
+    end
   end
 end
 
@@ -26,14 +27,12 @@ def scrap
   agent = Mechanize.new
   
   p "lets see whats there..."
-  agent.get(url)
-  
-  
+  page = agent.get(url)
+  agent.print_cookies
   
   p "first we are going to pass the captcha..."
   captcha = agent.get(captcha_url)
-  agent.cookie_jar.each do |cookie|
-    p cookie.to_s
+  agent.print_cookiese.to_s
   end
   agent.cookie_jar.save_as("cookies_mechanize.txt", :cookiestxt)
   captcha.save captcha_file_name
@@ -43,10 +42,7 @@ def scrap
   p captcha_txt
   
   p "now the serious business..."
-  agent.get(url)
-  agent.cookie_jar.each do |cookie|
-    p cookie.to_s
-  end
+  # TODO fill form in page and post captcha!
 end
 
 def save_capcha
