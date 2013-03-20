@@ -26,27 +26,33 @@ def scrap
   
   agent = Mechanize.new
   
-  p "lets see whats there..."
-  page = agent.get(url)
+  p "acessando o site ..."
+  captcha_page = agent.get(url)
   agent.print_cookies
   
-  p "first we need get the captcha..."
+  p "baixando o captcha..."
   captcha = agent.get(captcha_url)
   agent.print_cookies
   
+  p "o captcha será aberto em uma janela do seu navegador padrão. Volte para o terminal e digite o valor dele. <ENTER> para continuar"
   captcha.save captcha_file_name
   spawn("open captcha.html")
-  puts "Type captcha. <ENTER> to continue"
   captcha_txt = gets.split("\n").first.upcase
-  p captcha_txt
+  p "o captcha digitado é: #{captcha_txt}"
   
-  p "now the serious business..."
-  # TODO fill form
+  p "preenchendo o captcha no site do IPNI ..."
+  captcha_form = captcha_page.form_with :name => "input"
+  captcha_form.field_with(:name => "TextoFigura").value = captcha_txt
+  
+  search_page = agent.submit captcha_form
+  agent.print_cookies
+  p search_page.body
+  
 end
 
 def save_capcha
   # TODO delete if cookies works
-  captcha_page = agent.get(url)
+  captcha_captcha_page = agent.get(url)
   agent.get("#{url}/MarcaPatente/servlet/ServImg").save_as captcha_file_name
   system("open #{captcha_file_name}")
 end
