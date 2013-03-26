@@ -27,7 +27,6 @@ class InpiScrapper
   
   def init_urls
     @url = "http://formulario.inpi.gov.br/MarcaPatente/jsp/servimg/validamagic.jsp?BasePesquisa=Patentes"
-    @search_url = "http://formulario.inpi.gov.br/MarcaPatente/jsp/patentes/patenteSearchBasico.jsp"
     @captcha_url = "http://formulario.inpi.gov.br/MarcaPatente/servlet/ServImg"
     @captcha_file_name = "images/captcha.jpg"
   end
