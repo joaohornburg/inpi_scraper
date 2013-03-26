@@ -19,8 +19,9 @@ class InpiScrapper
   end
 
   def scrap
-    main_page = bypass_captcha
-    p main_page.body
+    search_page = bypass_captcha
+    p search_page
+    p search_page.body
   end
   
   private

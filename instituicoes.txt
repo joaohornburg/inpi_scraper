@@ -1,0 +1,40 @@
+FURB
+Universidade Regional de Blumenau
+UNIFEBE
+Centro Universitário de Brusque
+UnC
+Universidade do Contestado
+UNOCHAPECO
+Universidade Comunitária da Região de Chapecó
+UNESC
+Universidade do Extremo Sul Catarinense
+IFSC
+Instituto Federal de Santa Catarina
+UDESC
+Universidade do Estado de Santa Catarina
+UFSC
+Universidade Federal de Santa Catarina
+UNIASSELVI
+Centro Universitário Leonardo da Vinci
+UNIVALI
+Universidade do Vale do Itajaí
+UNERJ
+Centro Universitário de Jaraguá do Sul
+UNOESC
+Universidade do Oeste de Santa Catarina
+UNIVILLE
+Universidade da Região de Joinville
+UNIPLAC
+Universidade do Planalto Catarinense
+UNIBAVE
+Centro Universitário Barriga Verde
+UNIDAVI
+Universidade para o Desenvolvimento do Alto Vale do Itajaí
+USJ
+Centro Universitário Municipal de São José
+UNISUL
+Universidade do Sul de Santa Catarina
+CERTI
+Fundação Centros de Referência em Tecnologias Inovadoras
+EPAGRI
+EMPRESA DE PESQUISA AGROPECUÁRIA E EXTENSÃO RURAL DE SANTA CATARINA
