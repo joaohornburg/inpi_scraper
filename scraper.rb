@@ -25,6 +25,7 @@ def scrap
   end
   
   agent = Mechanize.new
+  agent.user_agent_alias = 'Mac Safari'
   
   p "acessando o site ..."
   captcha_page = agent.get(url)
@@ -42,9 +43,18 @@ def scrap
   
   p "preenchendo o captcha no site do IPNI ..."
   captcha_form = captcha_page.form_with :name => "input"
+  p captcha_form
   captcha_form.field_with(:name => "TextoFigura").value = captcha_txt
+  p captcha_form.field_with(:name => "TextoFigura")
   
-  search_page = agent.submit captcha_form
+  agent.print_cookies
+  
+  p "clicando no botão enviar..."
+  captcha_button = captcha_form.button_with(:value => "acessar")
+  p captcha_button
+  search_page = agent.submit captcha_form, captcha_button
+  # search_page = captcha_form.submit
+  # search_page = captcha_page.click("acessar")
   agent.print_cookies
   p search_page.body
   
