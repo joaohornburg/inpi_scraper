@@ -57,7 +57,6 @@ def scrap
   # search_page = captcha_page.click("acessar")
   agent.print_cookies
   p search_page.body
-  
 end
 
 def save_capcha
