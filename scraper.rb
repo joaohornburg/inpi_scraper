@@ -21,7 +21,7 @@ class InpiScrapper
   def scrap
     search_page = bypass_captcha
     p search_page
-    p search_page.body
+    p search_page.form_with(:name => "F_PatenteBasico")
   end
   
   private
@@ -47,6 +47,16 @@ class InpiScrapper
   end
   
   def bypass_captcha
+    attempt = 1
+    begin
+      p "== Tentativa #{attempt} =="
+      page = get_captcha_page_and_fill
+      attempt = attempt + 1
+    end until is_search_page( page )
+    page
+  end
+  
+  def get_captcha_page_and_fill
     p "acessando o site ..."
     captcha_page = @agent.get(@url)
     @agent.print_cookies
@@ -75,6 +85,12 @@ class InpiScrapper
     search_page = @agent.submit captcha_form, captcha_button
     @agent.print_cookies
     search_page
+  end
+  
+  def is_search_page(page)
+    is_search = !page.nil? && !page.form_with(:name => "F_PatenteBasico").nil?
+    p "Conseguiu passar? #{is_search}"
+    is_search
   end
     
 end
