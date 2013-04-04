@@ -21,16 +21,15 @@ class InpiScrapper
   end
 
   def scrap
-    search_page = bypass_captcha
-    @log.debug search_page
-    @log.debug search_page.form_with(:name => "F_PatenteBasico")
+    bypass_captcha
+    search_for "UFSC"
   end
   
   private
   
   def init_logger
     @log = Logger.new(STDOUT)
-    @log.level = Logger::WARN
+    @log.level = Logger::DEBUG
   end
   
   def init_urls
@@ -60,7 +59,8 @@ class InpiScrapper
       page = get_captcha_page_and_fill
       attempt = attempt + 1
     end until is_search_page( page )
-    page
+    @search_page = page
+    @log.debug @search_page
   end
   
   def get_captcha_page_and_fill
@@ -99,6 +99,14 @@ class InpiScrapper
     @log.info "conseguiu passar? #{is_search}"
     @log.error "não foi possível passar pelo CAPTCHA" unless is_search
     is_search
+  end
+  
+  def search_for(name)
+    search_form = @search_page.form_with(:name => "F_PatenteBasico")
+    @log.debug search_form
+    search_form.field_with(:name => "ExpressaoPesquisa").value = name
+    search_button = search_form.button_with(:name => "Botao")
+    @results_page = @agent.submit search_form, search_button
   end
     
 end
