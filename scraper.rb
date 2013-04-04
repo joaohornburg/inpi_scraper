@@ -120,6 +120,8 @@ class InpiScrapper
     search_form = @search_page.form_with(:name => "F_PatenteBasico")
     @log.debug search_form
     search_form.field_with(:name => "ExpressaoPesquisa").value = name
+    search_form.field_with(:name => "Coluna").options[2].select
+    @log.debug search_form.field_with(:name => "Coluna")
     search_button = search_form.button_with(:name => "Botao")
     @results_page = @agent.submit search_form, search_button
     @log.debug "Resultados para #{name}: \n#{@results_page.body}"
