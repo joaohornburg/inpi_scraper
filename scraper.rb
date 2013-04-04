@@ -37,10 +37,15 @@ class InpiScrapper
     @url = "http://formulario.inpi.gov.br/MarcaPatente/jsp/servimg/validamagic.jsp?BasePesquisa=Patentes"
     @captcha_url = "http://formulario.inpi.gov.br/MarcaPatente/servlet/ServImg"
     @captcha_file_name = "images/captcha.jpg"
+    @institutions_file_name = "instituicoes.txt"
   end
   
   def init_folders
     FileUtils.mkdir_p 'images'
+    clear_catpcha_image
+  end
+  
+  def clear_catpcha_image
     begin
       FileUtils.rm 'images/captcha.jpg'
     rescue Exception => e
@@ -53,9 +58,18 @@ class InpiScrapper
     @agent.user_agent_alias = 'Mac Safari'
   end
   
+  def init_institutions
+    @institutions = []
+    File.read(@institutions_file_name).each_line do |line|
+      @institutions << line.chop
+    end
+    @log.info("Vai pesquisar pelas instituições #{@institutions}")
+  end
+  
   def bypass_captcha
     attempt = 1
     begin
+      clear_catpcha_image
       @log.warn "== Tentativa #{attempt} =="
       page = get_captcha_page_and_fill
       attempt = attempt + 1
