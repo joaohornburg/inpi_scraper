@@ -18,6 +18,7 @@ class InpiScrapper
     init_urls
     init_folders
     init_agent
+    init_institutions
   end
 
   def scrap
@@ -107,6 +108,7 @@ class InpiScrapper
     search_form.field_with(:name => "ExpressaoPesquisa").value = name
     search_button = search_form.button_with(:name => "Botao")
     @results_page = @agent.submit search_form, search_button
+    @log.debug "Resultados para #{name}: \n#{@results_page.body}"
   end
     
 end
