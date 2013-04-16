@@ -23,14 +23,19 @@ class InpiScrapper
 
   def scrap
     bypass_captcha
-    search_for "UFSC"
+    # @institutions.each do |institution|
+      # search_for institution
+      search_for @institutions.first
+      get_patents
+    # end
   end
   
   private
   
   def init_logger
     @log = Logger.new(STDOUT)
-    @log.level = Logger::DEBUG
+    # @log.level = Logger::DEBUG
+    @log.level = Logger::INFO
   end
   
   def init_urls
@@ -117,6 +122,7 @@ class InpiScrapper
   end
   
   def search_for(name)
+    @log.info("-> Buscando por #{name}")
     search_form = @search_page.form_with(:name => "F_PatenteBasico")
     @log.debug search_form
     search_form.field_with(:name => "ExpressaoPesquisa").value = name
@@ -124,7 +130,65 @@ class InpiScrapper
     @log.debug search_form.field_with(:name => "Coluna")
     search_button = search_form.button_with(:name => "Botao")
     @results_page = @agent.submit search_form, search_button
-    @log.debug "Resultados para #{name}: \n#{@results_page.body}"
+    @results_page.encoding = 'utf-8'
+  end
+  
+  def get_patents
+    patent_links = get_patent_links
+    @log.debug "#{patent_links.size} são patentes"
+    patent_links.each do |pl|
+      @log.info "processando #{pl.href}"
+      patent_page = @agent.get pl.uri
+      get_patent_data_from patent_page
+      # TODO go back to list
+    end
+  end
+  
+  def get_patent_links
+    links = @results_page.links
+    @log.debug "achados #{links.size} links na pagina"
+    patent_links = []
+    links.each do |link|
+      patent_links << link if link.href.start_with? "/MarcaPatente/servlet/"
+    end
+    patent_links
+  end
+  
+  def get_patent_data_from patent_page
+    p "================================"
+    patent_page.encoding = 'utf-8'
+    parser = patent_page.parser
+    num_pedido = clean_str parser.xpath("/html/body/table[2]/tr[4]/td[2]/font/text()").to_s
+    p "num_pedido: |#{num_pedido}|"
+    p "   "
+    data_deposito = clean_str parser.xpath("/html/body/table[2]/tr[5]/td[2]/font/text()").to_s
+    p "data_deposito: |#{data_deposito}|"
+    p "   "
+    classificacao = clean_str parser.xpath("/html/body/table[2]/tr[6]/td[2]/font/a/text()").to_s
+    p "classificacao: |#{classificacao}|"
+    p "   "
+    titulo = parser.xpath("/html/body/table[2]/tr[7]/td[2]/font/text()").to_s
+    p "titulo: |#{titulo}|"
+    p "   "
+    resumo = parser.xpath("/html/body/table[2]/tr[8]/td[2]/font/text()").to_s
+    p "resumo: |#{resumo}|"
+    p "   "
+    depositante = parser.xpath("/html/body/table[2]/tr[9]/td[2]/font/text()").to_s
+    p "depositante: |#{depositante}|"
+    p "   "
+    inventores = parser.xpath("/html/body/table[2]/tr[10]/td[2]/font/text()").to_s
+    p "inventores: |#{inventores}|"
+    p "   "
+    procurador = parser.xpath("/html/body/table[2]/tr[11]/td[2]/font/text()").to_s
+    p "procurador: |#{procurador}|"
+    p "   "
+    link_documento = parser.xpath("/html/body/table[2]/tr[4]/td[3]/a/@href").to_s
+    p "link_documento: |#{link_documento}|"
+    p "   "
+  end
+  
+  def clean_str text
+    text.gsub("\n", "").gsub("\r", "").strip
   end
     
 end
